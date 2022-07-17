@@ -19,6 +19,7 @@
 params ["_player", "_target"];
 
 private _Temp = 0;
+private _showTemp = 0;
 private _offset = 0;
 
 if (alive _target) then {
@@ -42,3 +43,7 @@ if (GVAR(enable_Temperature_offset)) then {
     };
 };
 
+private _message = format ["%1",_showTemp];
+[_message, 2, _player] call ace_common_fnc_displayTextStructured;
+
+[_target, "quick_view", LSTRING(CheckTemperature_Log), [_showTemp]] call ace_medical_treatment_fnc_addToLog;
