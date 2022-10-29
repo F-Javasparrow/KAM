@@ -474,7 +474,7 @@ PREP_RECOMPILE_END;
 	QGVAR(kidneyAction),
 	"CHECKBOX",
 	[LLSTRING(SETTING_Kidney_Action), LLSTRING(SETTING_Kidney_Action_DESC)],
-	CBA_SETTINGS_CAT,
+	[CBA_SETTINGS_CAT, LSTRING(SubCategory_Kidney)],
 	[false],
 	true
 ] call CBA_Settings_fnc_init;
@@ -503,6 +503,15 @@ PREP_RECOMPILE_END;
 	[LLSTRING(SETTING_Max_Stack), LLSTRING(SETTING_Max_Stack_DESC)],
 	CBA_SETTINGS_CAT,
 	[1, 10, 5, 0],
+	true
+] call CBA_Settings_fnc_init;
+
+[
+	QGVAR(coagulation),
+	"CHECKBOX",
+	[LLSTRING(SETTING_Coagulation), LLSTRING(SETTING_Coagulation_DESC)],
+	CBA_SETTINGS_CAT,
+	[true],
 	true
 ] call CBA_Settings_fnc_init;
 

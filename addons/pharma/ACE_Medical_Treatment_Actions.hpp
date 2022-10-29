@@ -6,11 +6,38 @@ class ACE_Medical_Treatment_Actions {
     class Morphine;
     class CheckPulse;
     class CPR;
+    class Defibrillator;
+    class Defibrillator_AED_X_Vehicle;
 
     class BloodIV: BasicBandage {
         allowedSelections[] = {"Body", "LeftArm", "RightArm", "LeftLeg", "RightLeg"};
         medicRequired = QUOTE(ace_medical_treatment_medicIV);
         condition = QUOTE(!(GVAR(RequireInsIV)) || FUNC(removeIV));
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, 800, 12] call kat_pharma_fnc_fluid;";
+    };
+    class BloodIV_500: BloodIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, 400, 8] call kat_pharma_fnc_fluid;";
+    };
+    class BloodIV_250: BloodIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, 200, 4] call kat_pharma_fnc_fluid;";
+    };
+    class SalineIV: BloodIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, -750, 0] call kat_pharma_fnc_fluid;";
+    };
+    class SalineIV_500: SalineIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, -350, 0] call kat_pharma_fnc_fluid;";
+    };
+    class SalineIV_250: SalineIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, -150, 0] call kat_pharma_fnc_fluid;";
+    };
+    class PlasmaIV: BloodIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, 500, 15] call kat_pharma_fnc_fluid;";
+    };
+    class PlasmaIV_500: PlasmaIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, 250, 10] call kat_pharma_fnc_fluid;";
+    };
+    class PlasmaIV_250: PlasmaIV {
+        callbackSuccess = "[_medic, _patient, _bodyPart, _className, _itemUser, _usedItem] call ace_medical_treatment_fnc_ivBag; [_patient, 100, 5] call kat_pharma_fnc_fluid;";
     };
     class Epinephrine: Morphine{
         callbackSuccess = QFUNC(treatmentAdvanced_medication);
@@ -221,7 +248,7 @@ class ACE_Medical_Treatment_Actions {
         category = "advanced";
         allowedSelections[] = {"Body"};
         items[] = {"kat_IO_FAST"};
-        condition = QUOTE(!([ARR_3(_player, _patient, _bodyPart)] call FUNC(removeIV)));
+        condition = QUOTE(!([ARR_3(_player, _patient, _bodyPart)] call FUNC(removeIV)) && !(_patient getVariable [ARR_2(QQEGVAR(airway,recovery),false)]));
         treatmentTime = QGVAR(treatmentTime_ApplyIO);
         callbackSuccess = QUOTE([ARR_4(_player, _patient, _bodyPart, 'kat_IO_FAST')] call FUNC(applyIV));
         litter[] = {};
@@ -267,5 +294,19 @@ class ACE_Medical_Treatment_Actions {
         treatmentTime = QGVAR(treatmentTime_Flumazenil);
         items[] = {"kat_flumazenil"};
         callbackSuccess = QFUNC(treatmentAdvanced_Flumazenil);
+    };
+    class Dialysis: Defibrillator_AED_X_vehicle {
+        displayName = CSTRING(Dialysis_DisplayName);
+        displayNameProgress = CSTRING(Dialysis_DisplayNameProgress);
+        category = "surgery";
+        items[] = {};
+        condition = QFUNC(vehicleCheckDialysis);
+        treatmentTime = 15;
+        medicRequired = 1;
+        callbackProgress = "";
+        callbackStart = "";
+        callbackFailure = "";
+        callbackSuccess = QUOTE([ARR_2(_medic, _patient)] call FUNC(treatmentAdvanced_Dialysis));
+        icon = QPATHTOF(ui\X_Series-Device_W.paa);
     };
 };
