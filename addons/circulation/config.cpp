@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 class CfgPatches {
-    class ADDON    {
+    class ADDON {
         name = COMPONENT_NAME;
         requiredVersion = REQUIRED_VERSION;
         units[] = {
@@ -18,21 +18,21 @@ class CfgPatches {
             "kat_bloodIV_AB",
             "kat_bloodIV_AB_N",
             "kat_bloodIV_O_500",
-            "kat_bloodIV_O_500_N",
+            "kat_bloodIV_O_N_500",
             "kat_bloodIV_A_500",
-            "kat_bloodIV_A_500_N",
+            "kat_bloodIV_A_N_500",
             "kat_bloodIV_B_500",
-            "kat_bloodIV_B_500_N",
+            "kat_bloodIV_B_N_500",
             "kat_bloodIV_AB_500",
-            "kat_bloodIV_AB_500_N",
+            "kat_bloodIV_AB_N_500",
             "kat_bloodIV_O_250",
-            "kat_bloodIV_O_250_N",
+            "kat_bloodIV_O_N_250",
             "kat_bloodIV_A_250",
-            "kat_bloodIV_A_250_N",
+            "kat_bloodIV_A_N_250",
             "kat_bloodIV_B_250",
-            "kat_bloodIV_B_250_N",
+            "kat_bloodIV_B_N_250",
             "kat_bloodIV_AB_250",
-            "kat_bloodIV_AB_250_N",
+            "kat_bloodIV_AB_N_250",
             "kat_X_AED",
             "kat_crossPanel",
             "KAT_Empty_bloodIV_500",
@@ -63,11 +63,12 @@ class CfgPatches {
 };
 
 #include "CfgFunctions.hpp"
+#include "CfgMoves.hpp"
 #include "CfgEventHandlers.hpp"
 #include "CfgSounds.hpp"
 #include "CfgWeapons.hpp"
 #include "CfgVehicles.hpp"
 #include "ACE_Medical_Treatment.hpp"
 #include "ACE_Medical_Treatment_Actions.hpp"
-#include "ACE_Medical_Advanced.hpp"
 #include "ui\CrossPanel_Dialog.hpp"
+#include "ui\AEDX_Monitor_Dialog.hpp"

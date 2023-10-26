@@ -13,7 +13,7 @@ PREP_RECOMPILE_END;
     QGVAR(enable),
     "CHECKBOX",
     LLSTRING(SETTING_ENABLE),
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [true],
     true
 ] call CBA_Settings_fnc_init;
@@ -23,7 +23,7 @@ PREP_RECOMPILE_END;
     QGVAR(SpO2_dieValue),
     "SLIDER",
     LLSTRING(SETTING_SpO2_dieValue),
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [5, 95, 65, 0],
     true
 ] call CBA_Settings_fnc_init;
@@ -33,7 +33,7 @@ PREP_RECOMPILE_END;
     QGVAR(SpO2_dieActive),
     "CHECKBOX",
     LLSTRING(SETTING_SpO2_dieActive),
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [true],
     true
 ] call CBA_Settings_fnc_init;
@@ -43,7 +43,7 @@ PREP_RECOMPILE_END;
     QGVAR(SpO2_unconscious),
     "SLIDER",
     [LLSTRING(SETTING_SpO2_unconscious), LLSTRING(SETTING_SpO2_unconscious_Desc)],
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [0, 100, 75, 0],
     true
 ] call CBA_Settings_fnc_init;
@@ -53,7 +53,7 @@ PREP_RECOMPILE_END;
     QGVAR(SpO2_MultiplyPositive),
     "SLIDER",
     LLSTRING(SETTING_MultiplyPositive),
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [0, 10, 1, 1],
     true
 ] call CBA_Settings_fnc_init;
@@ -63,7 +63,7 @@ PREP_RECOMPILE_END;
     QGVAR(SpO2_MultiplyNegative),
     "SLIDER",
     LLSTRING(SETTING_MultiplyNegative),
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [0, 10, 1, 1],
     true
 ] call CBA_Settings_fnc_init;
@@ -73,7 +73,7 @@ PREP_RECOMPILE_END;
     QGVAR(Stable_spo2),
     "SLIDER",
     [LLSTRING(SETTING_STABLE_SPO2), LLSTRING(DESCRIPTION_STABLE_SPO2)],
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [0, 95, 85, 0],
     true
 ] call CBA_Settings_fnc_init;
@@ -83,7 +83,7 @@ PREP_RECOMPILE_END;
     QGVAR(SpO2_perfusion),
     "CHECKBOX",
     LLSTRING(SETTING_SpO2_Perfusion),
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [true],
     true
 ] call CBA_Settings_fnc_init;
@@ -93,7 +93,7 @@ PREP_RECOMPILE_END;
     QGVAR(SpO2_PerfusionMultiplier),
     "SLIDER",
     LLSTRING(SETTING_PerfusionMultiplier),
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Basic)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
     [0, 10, 1, 1],
     true
 ] call CBA_Settings_fnc_init;
@@ -128,10 +128,30 @@ PREP_RECOMPILE_END;
     true
 ] call CBA_Settings_fnc_init;
 
+// Clear Chest Seal from medical menu after treatment
+[
+    QGVAR(clearChestSealAfterTreatment),
+    "CHECKBOX",
+    LLSTRING(SETTING_clearChestSealAfterTreatment),
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [false],
+    true
+] call CBA_Settings_fnc_init;
+
+// Sets SpO2 level threshold for audible warning
+[
+    QGVAR(PulseOximeter_SpO2Warning),
+    "SLIDER",
+    LLSTRING(SETTING_Threshold_SpO2Warning),
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [1, 100, 85, 1],
+    true
+] call CBA_Settings_fnc_init;
+
 // breathing probability for a pneumothorax
 // a pneumothorax is the presence of air or gas in the cavity between the lungs and the chest wall
 [
-    QGVAR(pneumothorax),
+    QGVAR(pneumothoraxChance),
     "SLIDER",
     LLSTRING(SETTING_pneumothorax),
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
@@ -139,13 +159,33 @@ PREP_RECOMPILE_END;
     true
 ] call CBA_Settings_fnc_init;
 
-// % Chance of Hemopneumothorax
+// % Chance of Hemopneumothorax and Tension Pneumothorax happening when a Pneumothorax happens
 [
-    QGVAR(hemopneumothoraxChance),
+    QGVAR(advPtxChance),
+    "SLIDER",
+    [LLSTRING(ADVANCED_PTX_CHANCE_OPTION), LLSTRING(DESCRIPTION_ADVANCED_PTX_CHANCE_OPTION)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [0, 100, 5, 0, false],
+    true
+] call CBA_Settings_fnc_init;
+
+// % Chance of Hemopneumothorax (rest of % is chance for tension)
+[
+    QGVAR(hptxChance),
     "SLIDER",
     [LLSTRING(HEMOPNEUMOTHORAX_CHANCE_OPTION), LLSTRING(DESCRIPTION_HEMOPNEUMOTHORAX_CHANCE_OPTION)],
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
-    [0, 95, 5, 0, false],
+    [0, 100, 5, 0, false],
+    true
+] call CBA_Settings_fnc_init;
+
+//Enable Advanced Pneumothorax
+[
+    QGVAR(advPtxEnable),
+    "CHECKBOX",
+    [LLSTRING(ADVANCED_PTX_OPTION), LLSTRING(DESCRIPTION_ADVANCED_PTX_OPTION)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [false],
     true
 ] call CBA_Settings_fnc_init;
 
@@ -165,27 +205,37 @@ PREP_RECOMPILE_END;
     "SLIDER",
     [LLSTRING(PNEUMOTHORAX_DAMAGE_THRESHOLD), LLSTRING(PNEUMOTHORAX_DAMAGE_THRESHOLD_DESCRIPTION)],
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
-    [0, 1, 0.4, 1],
+    [0, 1, 0.4, 2],
     true
 ] call CBA_Settings_fnc_init;
 
-// Enables hardcore mod for pneumothorax by not making it appear in medical menu - Stethoscope might help
+// Sets if damage above pneumothorax damage threshold increases chance of inflicting pneumothorax or advanced pneumothorax
 [
-    QGVAR(pneumothorax_hardcore),
+    QGVAR(pneumothoraxDamageThreshold_TakenDamage),
     "CHECKBOX",
-    [LLSTRING(SETTING_pneumothorax_hardcore), LLSTRING(SETTING_pneumothorax_hardcore_DESC)],
+    [LLSTRING(SETTING_PneumothoraxDamageThreshold_DamageTaken), LLSTRING(SETTING_PneumothoraxDamageThreshold_DamageTaken_DESCRIPTION)],
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
-    [false],
+    [true],
     true
 ] call CBA_Settings_fnc_init;
 
-// Enables hardcore mod for tension and hemopneumothorax by not making it appear in medical menu - Stethoscope might help
+// Chance for deep penetrating injury to appear when pneumothorax damage threshold is passed but no pneumothorax is inflicted
 [
-    QGVAR(tensionhemothorax_hardcore),
-    "CHECKBOX",
-    [LLSTRING(SETTING_tensionhemothorax_hardcore), LLSTRING(SETTING_tensionhemothorax_hardcore_DESC)],
+    QGVAR(deepPenetratingInjuryChance),
+    "SLIDER",
+    [LLSTRING(SETTING_deepPenetratingInjuryChance), LLSTRING(SETTING_deepPenetratingInjuryChance_DESC)],
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
-    [false],
+    [0, 100, 30, 0, false],
+    true
+] call CBA_Settings_fnc_init;
+
+// Sets how much internal bleeding is applied while suffering from hemopneumothorax
+[
+    QGVAR(HPTXBleedAmount),
+    "SLIDER",
+    [LLSTRING(SETTING_HPTX_BleedAmount), LLSTRING(SETTING_HPTX_BleedAmount_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [0, 1, 0.06, 2],
     true
 ] call CBA_Settings_fnc_init;
 
@@ -193,19 +243,39 @@ PREP_RECOMPILE_END;
 [
     QGVAR(deterioratingPneumothorax_chance),
     "SLIDER",
-    [LLSTRING(SETTING_deterioratingPneumothorax_chance), LLSTRING(SETTING_deterioratingPneumothorax_chance_Desc)],
+    [LLSTRING(SETTING_deterioratingPneumothorax_chance), LLSTRING(SETTING_deterioratingPneumothorax_chance_DESC)],
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
-    [0, 100, 10, 0],
+    [0, 100, 50, 0],
     true
 ] call CBA_Settings_fnc_init;
 
 //Deteriorating pneumothorax countdown
 [
-    QGVAR(deterioratingPneumothorax_countdown),
+    QGVAR(deterioratingPneumothorax_interval),
     "SLIDER",
-    [LLSTRING(SETTING_deterioratingPneumothorax_countdown), LLSTRING(SETTING_deterioratingPneumothorax_countdown_Desc)],
+    [LLSTRING(SETTING_deterioratingPneumothorax_interval), LLSTRING(SETTING_deterioratingPneumothorax_interval_Desc)],
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
-    [1, 3600, 120, 0],
+    [1, 3600, 60, 0],
+    true
+] call CBA_Settings_fnc_init;
+
+// Set if pneumothorax injury should always be visible in medical menu
+[
+    QGVAR(PneumothoraxAlwaysVisible),
+    "CHECKBOX",
+    [LLSTRING(SETTING_PneumothoraxAlwaysVisible), LLSTRING(SETTING_PneumothoraxAlwaysVisible_DESCRIPTION)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [false],
+    true
+] call CBA_Settings_fnc_init;
+
+// Set if tension/hemopneumothorax injury should always be visible in medical menu
+[
+    QGVAR(TensionHemothoraxAlwaysVisible),
+    "CHECKBOX",
+    [LLSTRING(SETTING_TensionHemothoraxAlwaysVisible), LLSTRING(SETTING_TensionHemothoraxAlwaysVisible_DESCRIPTION)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [false],
     true
 ] call CBA_Settings_fnc_init;
 
@@ -219,25 +289,45 @@ PREP_RECOMPILE_END;
     true
 ] call CBA_Settings_fnc_init;
 
-//Enables cyanosis diagnose
+// Sets if inspect chest action is enabled
 [
-    QGVAR(enableCyanosis),
+    QGVAR(inspectChest_enable),
+    "LIST",
+    LLSTRING(SETTING_inspectChest_enable),
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [[0, 1, 2], [ACELLSTRING(Common,Disabled), LLSTRING(SETTING_inspectChest_enable_simple), ACELLSTRING(Common,Enabled)], 2],
+    true
+] call CBA_Settings_fnc_init;
+
+// Sets medical level required to inspect chest
+[
+    QGVAR(inspectChest_medLvl),
+    "LIST",
+    LLSTRING(SETTING_inspectChest_medLvl),
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [[0, 1, 2], ["STR_ACE_Medical_Treatment_Anyone", "STR_ACE_Medical_Treatment_Medics", "STR_ACE_Medical_Treatment_Doctors"], 0],
+    true
+] call CBA_settings_fnc_init;
+
+// Sets chest inspect action time
+[
+    QGVAR(inspectChest_time),
+    "SLIDER",
+    [LLSTRING(SETTING_inspectChest_time)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_ThoraxInjuries)],
+    [1, 60, 6, 1],
+    true
+] call CBA_Settings_fnc_init;
+
+// Shows cyanosis in medical menu
+[
+    QGVAR(showCyanosis),
     "CHECKBOX",
-    [LLSTRING(SETTING_Cyanosis), LLSTRING(SETTING_Cyanosis_DESC)],
+    [LLSTRING(SETTING_showCyanosis), LLSTRING(SETTING_showCyanosis_DESC)],
     [CBA_SETTINGS_CAT, LSTRING(SubCategory_Cyanosis)],
     [true],
     true
 ] call CBA_Settings_fnc_init;
-
-//Settable list for checking Cyanosis per medical class
-[
-    QGVAR(medLvl_Cyanosis),
-    "LIST",
-    [LLSTRING(CYANOSIS_TREATMENT_LEVEL), LLSTRING(CYANOSIS_TREATMENT_LEVEL_DESCRIPTION)],
-    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Cyanosis)],
-    [[0, 1, 2], ["STR_ACE_Medical_Treatment_Anyone", "STR_ACE_Medical_Treatment_Medics", "STR_ACE_Medical_Treatment_Doctors"], 0],
-    true
-] call CBA_settings_fnc_init;
 
 //Slight level for cyanosis
 [
@@ -269,16 +359,118 @@ PREP_RECOMPILE_END;
     true
 ] call CBA_Settings_fnc_init;
 
-// sound volume for Stethoscope
-/*
+//Enables White Flashing on Below 90% SPO2
 [
-    QGVAR(StethoscopeSoundVolume),
-    "SLIDER",
-    [LLSTRING(SETTING_StethoscopeSoundVolume), LLSTRING(DESCRIPTION_StethoscopeSoundVolume)],
-    CBA_SETTINGS_CAT,
-    [1, 4, 1, 0],
+    QGVAR(enableSPO2Flashing),
+    "CHECKBOX",
+    [LLSTRING(SETTING_SPO2Flashing_display), LLSTRING(SETTING_SPO2Flashing_DESC)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
+    [true],
     true
 ] call CBA_Settings_fnc_init;
-*/
+
+//Enable stamina loss by low SPO2
+[
+    QGVAR(staminaLossAtLowSPO2),
+    "CHECKBOX",
+    [LLSTRING(SETTING_Stamina_Loss_SPO2_display), LLSTRING(SETTING_Stamina_Loss_SPO2_DESC)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
+    [true],
+    true
+]   call CBA_Settings_fnc_init;
+
+//low SPO2 Warning Level
+[
+    QGVAR(lowSPO2Level),
+    "SLIDER",
+    [LLSTRING(SETTING_lowSPO2Level_display), LLSTRING(SETTING_lowSPO2Level_DESC)],
+    [CBA_SETTINGS_CAT, ELSTRING(GUI,SubCategory_Basic)],
+    [0, 100, 90, 1],
+    true
+] call CBA_Settings_fnc_init;
+
+// Sets sound volume of stethoscope
+[
+    QGVAR(stethoscopeSoundVolume),
+    "SLIDER",
+    [LLSTRING(SETTING_stethoscopeSoundVolume), LLSTRING(SETTING_stethoscopeSoundVolume_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [0, 4, 2, 1],
+    2,
+    {
+        player setVariable [QGVAR(stethoscopeSoundVolume), _this, true];
+    },
+    false
+] call CBA_Settings_fnc_init;
+
+// Sets how long stethoscope listening action lasts
+[
+    QGVAR(stethoscopeListeningTime),
+    "SLIDER",
+    [LLSTRING(SETTING_stethoscopeListeningTime), LLSTRING(SETTING_stethoscopeListeningTime_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [1, 60, 15, 1],
+    true
+] call CBA_Settings_fnc_init;
+
+// Sets required medical level for BVM usage
+[
+    QGVAR(medLvl_BVM),
+    "LIST",
+    [LLSTRING(SETTING_BVM_MedLvl),LLSTRING(SETTING_BVM_MedLvl_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [[0, 1, 2], ["STR_ACE_Medical_Treatment_Anyone", "STR_ACE_Medical_Treatment_Medics", "STR_ACE_Medical_Treatment_Doctors"], 0],
+    true
+] call CBA_settings_fnc_init;
+
+// Sets required medical level for Pocket BVM usage
+[
+    QGVAR(medLvl_PocketBVM),
+    "LIST",
+    [LLSTRING(SETTING_PocketBVM_MedLvl),LLSTRING(SETTING_PocketBVM_MedLvl_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [[0, 1, 2], ["STR_ACE_Medical_Treatment_Anyone", "STR_ACE_Medical_Treatment_Medics", "STR_ACE_Medical_Treatment_Doctors"], 0],
+    true
+] call CBA_settings_fnc_init;
+
+// Sets required medical level for BVM with oxygen usage
+[
+    QGVAR(medLvl_BVM_Oxygen),
+    "LIST",
+    [LLSTRING(SETTING_BVM_Oxygen_MedLvl),LLSTRING(SETTING_BVM_Oxygen_MedLvl_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [[0, 1, 2], ["STR_ACE_Medical_Treatment_Anyone", "STR_ACE_Medical_Treatment_Medics", "STR_ACE_Medical_Treatment_Doctors"], 0],
+    true
+] call CBA_settings_fnc_init;
+
+// Sets BVM oxygen effectiveness multiplier
+[
+    QGVAR(BVMOxygen_Multiplier),
+    "SLIDER",
+    LLSTRING(SETTING_BVMOxygen_Multiplier),
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [1, 10, 1, 1],
+    true
+] call CBA_Settings_fnc_init;
+
+// Sets time required to refill oxygen tank
+[
+    QGVAR(PortableOxygenTank_RefillTime),
+    "SLIDER",
+    [LLSTRING(SETTING_PortableOxygenTank_RefillTime),LLSTRING(SETTING_PortableOxygenTank_RefillTime_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [0.1, 60, 5, 1],
+    true
+] call CBA_settings_fnc_init;
+
+// Sets whether medical facilites and/or vehicles provide direct oxygen and refill capability 
+[
+    QGVAR(locationProvideOxygen),
+    "LIST",
+    [LLSTRING(SETTING_locationProvideOxygen), LLSTRING(SETTING_locationProvideOxygen_DESC)],
+    [CBA_SETTINGS_CAT, LSTRING(SubCategory_Items)],
+    [[0, 1, 2, 3], ["STR_ACE_Common_None", "STR_ACE_Common_Vehicle", "STR_ACE_Medical_Treatment_MedicalFacilities", "STR_ACE_Medical_Treatment_VehiclesAndFacilities"], 3],
+    true
+] call CBA_settings_fnc_init;
 
 ADDON = true;

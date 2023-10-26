@@ -18,27 +18,16 @@
 
 params ["_medic", "_patient"];
 
-_patient setVariable ["KAT_medical_activeChestSeal", true, true];
-
-_fnc_random = {
-    if (random 100 <= GVAR(hemopneumothoraxChance)) then {
-        _patient setVariable ["KAT_medical_hemopneumothorax", true, true];
+if (GVAR(clearChestSealAfterTreatment)) then {
+    if (_patient getVariable [QGVAR(hemopneumothorax), false] || _patient getVariable [QGVAR(tensionpneumothorax), false]) then {
+        _patient setVariable [QGVAR(activeChestSeal), true, true];
     };
+} else {
+    _patient setVariable [QGVAR(activeChestSeal), true, true];
 };
+_patient setVariable [QGVAR(deepPenetratingInjury), false, true];
+_patient setVariable [QGVAR(pneumothorax), 0, true];
 
-if !(kat_breathing_pneumothorax_hardcore) exitWith {
-    if (_patient getVariable ["KAT_medical_pneumothorax", false]) then {
-        _patient setVariable ["KAT_medical_pneumothorax", false, true];
-        [_patient, "activity", LSTRING(pneumothorax), [[_medic] call ace_common_fnc_getName]] call ace_medical_treatment_fnc_addToLog;
-        call _fnc_random;
-        if (!(_patient getVariable ["KAT_medical_pneumothorax", false]) && {!(_patient getVariable ["KAT_medical_hemopneumothorax", false]) && {!(_patient getVariable ["KAT_medical_tensionpneumothorax", false])}}) then {
-            _patient setVariable ["KAT_medical_activeChestSeal", false, true];
-        };
-    };
-};
-
-_patient setVariable ["KAT_medical_pneumothorax", false, true];
-
-if (!(_patient getVariable ["KAT_medical_pneumothorax", false]) && {!(_patient getVariable ["KAT_medical_hemopneumothorax", false]) && {!(_patient getVariable ["KAT_medical_tensionpneumothorax", false])}}) then {
-    _patient setVariable ["KAT_medical_activeChestSeal", false, true];
+if (!(_patient getVariable [QGVAR(hemopneumothorax), false]) && !(_patient getVariable [QGVAR(tensionpneumothorax), false])) then {
+    [_patient, 0, 0, "ptx_tension", true] call EFUNC(circulation,updateBloodPressureChange);
 };

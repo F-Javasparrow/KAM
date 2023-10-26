@@ -5,86 +5,89 @@ class CfgWeapons {
 
     class kat_bloodIV_O: ACE_bloodIV {
         displayName = CSTRING(BloodIV_O);
+        ACE_isMedicalItem = 1;
     };
-    class kat_bloodIV_O_N: ACE_bloodIV {
+    class kat_bloodIV_O_N: kat_bloodIV_O {
         displayName = CSTRING(BloodIV_O_N);
     };
-    class kat_bloodIV_A: ACE_bloodIV {
+    class kat_bloodIV_A: kat_bloodIV_O {
         displayName = CSTRING(BloodIV_A);
     };
-    class kat_bloodIV_A_N: ACE_bloodIV {
+    class kat_bloodIV_A_N: kat_bloodIV_O {
         displayName = CSTRING(BloodIV_A_N);
     };
-    class kat_bloodIV_B: ACE_bloodIV {
+    class kat_bloodIV_B: kat_bloodIV_O {
         displayName = CSTRING(BloodIV_B);
     };
-    class kat_bloodIV_B_N: ACE_bloodIV {
+    class kat_bloodIV_B_N: kat_bloodIV_O {
         displayName = CSTRING(BloodIV_B_N);
     };
-    class kat_bloodIV_AB: ACE_bloodIV {
+    class kat_bloodIV_AB: kat_bloodIV_O {
         displayName = CSTRING(BloodIV_AB);
     };
-    class kat_bloodIV_AB_N: ACE_bloodIV {
+    class kat_bloodIV_AB_N: kat_bloodIV_O {
         displayName = CSTRING(BloodIV_AB_N);
     };
     class ACE_bloodIV_500;
     class kat_bloodIV_O_500: ACE_bloodIV_500 {
         displayName = CSTRING(BloodIV_O_500);
+        ACE_isMedicalItem = 1;
     };
-    class kat_bloodIV_O_N_500: ACE_bloodIV_500 {
+    class kat_bloodIV_O_N_500: kat_bloodIV_O_500 {
         displayName = CSTRING(BloodIV_O_500_N);
     };
-    class kat_bloodIV_A_500: ACE_bloodIV_500 {
+    class kat_bloodIV_A_500: kat_bloodIV_O_500 {
         displayName = CSTRING(BloodIV_A_500);
     };
-    class kat_bloodIV_A_N_500: ACE_bloodIV_500 {
+    class kat_bloodIV_A_N_500: kat_bloodIV_O_500 {
         displayName = CSTRING(BloodIV_A_500_N);
     };
-    class kat_bloodIV_B_500: ACE_bloodIV_500 {
+    class kat_bloodIV_B_500: kat_bloodIV_O_500 {
         displayName = CSTRING(BloodIV_B_500);
     };
-    class kat_bloodIV_B_N_500: ACE_bloodIV_500 {
+    class kat_bloodIV_B_N_500: kat_bloodIV_O_500 {
         displayName = CSTRING(BloodIV_B_500_N);
     };
-    class kat_bloodIV_AB_500: ACE_bloodIV_500 {
+    class kat_bloodIV_AB_500: kat_bloodIV_O_500 {
         displayName = CSTRING(BloodIV_AB_500);
     };
-    class kat_bloodIV_AB_N_500: ACE_bloodIV_500 {
+    class kat_bloodIV_AB_N_500: kat_bloodIV_O_500 {
         displayName = CSTRING(BloodIV_AB_500_N);
     };
     class ACE_bloodIV_250;
     class kat_bloodIV_O_250: ACE_bloodIV_250 {
         displayName = CSTRING(BloodIV_O_250);
+        ACE_isMedicalItem = 1;
     };
-    class kat_bloodIV_O_N_250: ACE_bloodIV_250 {
+    class kat_bloodIV_O_N_250: kat_bloodIV_O_250 {
         displayName = CSTRING(BloodIV_O_250_N);
     };
-    class kat_bloodIV_A_250: ACE_bloodIV_250 {
+    class kat_bloodIV_A_250: kat_bloodIV_O_250 {
         displayName = CSTRING(BloodIV_A_250);
     };
-    class kat_bloodIV_A_N_250: ACE_bloodIV_250 {
+    class kat_bloodIV_A_N_250: kat_bloodIV_O_250 {
         displayName = CSTRING(BloodIV_A_250_N);
     };
-    class kat_bloodIV_B_250: ACE_bloodIV_250 {
+    class kat_bloodIV_B_250: kat_bloodIV_O_250 {
         displayName = CSTRING(BloodIV_B_250);
     };
-    class kat_bloodIV_B_N_250: ACE_bloodIV_250 {
+    class kat_bloodIV_B_N_250: kat_bloodIV_O_250 {
         displayName = CSTRING(BloodIV_B_250_N);
     };
-    class kat_bloodIV_AB_250: ACE_bloodIV_250 {
+    class kat_bloodIV_AB_250: kat_bloodIV_O_250 {
         displayName = CSTRING(BloodIV_AB_250);
     };
-    class kat_bloodIV_AB_N_250: ACE_bloodIV_250 {
+    class kat_bloodIV_AB_N_250: kat_bloodIV_O_250 {
         displayName = CSTRING(BloodIV_AB_250_N);
     };
     class KAT_Empty_bloodIV_500: ACE_bloodIV
     {
         displayName = CSTRING(FieldBloodTK500_Display);
         descriptionShort = CSTRING(FieldBloodTK_Desc);
-        descriptionUse = CSTRING(FieldBloodTK_Desc);
         picture = QPATHTOF(ui\bloodIV_empty_ca.paa);
         author = "Battlekeeper";
         hiddenSelectionsTextures[] = {QPATHTOF(ui\IVBag_blood_500ml_empty_ca.paa)};
+        ACE_isMedicalItem = 1;
         class ItemInfo: CBA_MiscItem_ItemInfo {
             mass = 2;
         };
@@ -93,10 +96,10 @@ class CfgWeapons {
     {
         displayName = CSTRING(FieldBloodTK250_Display);
         descriptionShort = CSTRING(FieldBloodTK_Desc);
-        descriptionUse = CSTRING(FieldBloodTK_Desc);
         picture = QPATHTOF(ui\bloodIV_empty_ca.paa);
         author = "Battlekeeper";
         hiddenSelectionsTextures[] = {QPATHTOF(ui\IVBag_blood_500ml_empty_ca.paa)};
+        ACE_isMedicalItem = 1;
         class ItemInfo: CBA_MiscItem_ItemInfo {
             mass = 1;
         };
@@ -104,11 +107,11 @@ class CfgWeapons {
     class kat_AED: ACE_ItemCore {
         scope = 2;
         author = "Katalam";
-        displayName = "$STR_KAT_circulation_AED_DISPLAYNAME";
+        displayName = CSTRING(AED_DISPLAYNAME);
         picture = QPATHTOF(ui\defib.paa);
         model = "\A3\Structures_F_EPA\Items\Medical\Defibrillator_F.p3d";
-        descriptionShort = "$STR_KAT_circulation_AED_DESCRIPTION";
-        descriptionUse = "$STR_KAT_circulation_AED_DESCRIPTION";
+        descriptionShort = CSTRING(AED_DESCRIPTION);
+        ACE_isMedicalItem = 1;
         class ItemInfo: CBA_MiscItem_ItemInfo {
             mass = 30;
         };
@@ -119,7 +122,7 @@ class CfgWeapons {
         picture = QPATHTOF(ui\x-series.paa);
         model = QPATHTOF(models\aedx\aedx.p3d);
         descriptionShort = CSTRING(X_Desc);
-        descriptionUse = CSTRING(X_Desc);
+        ACE_isMedicalItem = 1;
         class ItemInfo: CBA_MiscItem_ItemInfo {
             mass = 40;
         };

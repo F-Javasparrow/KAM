@@ -1,5 +1,5 @@
-class ADDON {
-	class Medication {
+class ACE_ADDON(Medical_Treatment) {
+    class Medication {
         class Epinephrine {
             painReduce = 0;
             hrIncreaseLow[] = {10, 20};
@@ -188,6 +188,50 @@ class ADDON {
             maxDose = 3;
             incompatibleMedication[] = {};
             viscosityChange = -15;
+        };
+        class Pervitin {
+            painReduce = 0.5;
+            hrIncreaseLow[] = {15, 25};
+            hrIncreaseNormal[] = {15, 30};
+            hrIncreaseHigh[] = {15, 25};
+            timeInSystem = 600;
+            timeTillMaxEffect = 5;
+            maxDose = 2;
+            incompatibleMedication[] = {};
+            viscosityChange = 5;
+        };
+        class Caffeine {
+            painReduce = 0;
+            hrIncreaseLow[] = {0, 5};
+            hrIncreaseNormal[] = {5, 10};
+            hrIncreaseHigh[] = {5, 15};
+            timeInSystem = 1800;
+            timeTillMaxEffect = 5;
+            maxDose = 6;
+            incompatibleMedication[] = {};
+            viscosityChange = 0;
+        };
+        class BubbleWrap {
+            painReduce = 0.05;
+            hrIncreaseLow[] = {0, 0};
+            hrIncreaseNormal[] = {0, 0};
+            hrIncreaseHigh[] = {0, 0};
+            timeInSystem = 300;
+            timeTillMaxEffect = 5;
+            maxDose = 999;
+            incompatibleMedication[] = {};
+            viscosityChange = 0;
+        };
+        class Penthrox {
+            painReduce = 0.6;
+            hrIncreaseLow[] = {-0, -5};
+            hrIncreaseNormal[] = {-5, -10};
+            hrIncreaseHigh[] = {-5, -15};
+            timeInSystem = 300;
+            timeTillMaxEffect = 10;
+            maxDose = 10;
+            incompatibleMedication[] = {};
+            viscosityChange = 5;
         };
     };
 };

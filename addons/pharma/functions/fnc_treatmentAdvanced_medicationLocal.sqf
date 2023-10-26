@@ -1,6 +1,7 @@
 #include "script_component.hpp"
 /*
- * Author: Glowbal, mharis001 Edited by MiszczuZPolski
+ * Author: Glowbal, mharis001
+ * Modified: MiszczuZPolski, Blue
  * Local callback for administering medication to a patient.
  *
  * Arguments:
@@ -23,7 +24,6 @@
 params ["_patient", "_bodyPart", "_classname"];
 TRACE_3("medicationLocal",_patient,_bodyPart,_classname);
 
-
 // Medication has no effects on dead units
 if (!alive _patient) exitWith {};
 
@@ -37,28 +37,34 @@ if (!GVAR(advancedMedication)) exitWith {
         case "Epinephrine": {
             private _sedated = _patient getVariable [QEGVAR(surgery,sedated), false];
             if !(_sedated) then {
-                ["ace_medical_WakeUp", _patient] call CBA_fnc_localEvent;
+                [QACEGVAR(medical,WakeUp), _patient] call CBA_fnc_localEvent;
             };
             
-            [_patient, -0.15] call kat_pharma_fnc_alphaAction;
+            [_patient, -0.15] call FUNC(alphaAction);
         };
     };
 };
 TRACE_1("Running treatmentMedicationLocal with Advanced configuration for",_patient);
 
-
-// Handle tourniquet on body part blocking blood flow at injection site
 private _partIndex = ALL_BODY_PARTS find toLower _bodyPart;
 
+// Handle IV blockage
+if (((_patient getVariable [QGVAR(IV), [0,0,0,0,0,0]]) select _partIndex) isEqualTo 3) exitWith {
+    private _occludedMedications = _patient getVariable [QACEGVAR(medical,occludedMedications), []];
+    _occludedMedications pushBack [_partIndex, _classname];
+    _patient setVariable [QACEGVAR(medical,occludedMedications), _occludedMedications, true];
+};
+
+// Handle tourniquet on body part blocking blood flow at injection site
 if (HAS_TOURNIQUET_APPLIED_ON(_patient,_partIndex)) exitWith {
     TRACE_1("unit has tourniquets blocking blood flow on injection site",_tourniquets);
-    private _occludedMedications = _patient getVariable [ace_medical_occludedMedications, []];
+    private _occludedMedications = _patient getVariable [QACEGVAR(medical,occludedMedications), []];
     _occludedMedications pushBack [_partIndex, _classname];
-    _patient setVariable [ace_medical_occludedMedications, _occludedMedications, true];
+    _patient setVariable [QACEGVAR(medical,occludedMedications), _occludedMedications, true];
 };
 
 // Get adjustment attributes for used medication
-private _defaultConfig = configFile >> QUOTE(ADDON) >> "Medication";
+private _defaultConfig = configFile >> QUOTE(ACE_ADDON(Medical_Treatment)) >> "Medication";
 private _medicationConfig = _defaultConfig >> _classname;
 
 private _painReduce             = GET_NUMBER(_medicationConfig >> "painReduce",getNumber (_defaultConfig >> "painReduce"));
@@ -79,10 +85,15 @@ private _heartRateChange = _minIncrease + random (_maxIncrease - _minIncrease);
 
 // Adjust the medication effects and add the medication to the list
 TRACE_3("adjustments",_heartRateChange,_painReduce,_viscosityChange);
-[_patient, _className, _timeTillMaxEffect, _timeInSystem, _heartRateChange, _painReduce, _viscosityChange] call ace_medical_status_fnc_addMedicationAdjustment;
+[_patient, _className, _timeTillMaxEffect, _timeInSystem, _heartRateChange, _painReduce, _viscosityChange] call ACEFUNC(medical_status,addMedicationAdjustment);
 
 // Check for medication compatiblity
-[_patient, _className, _maxDose, _incompatibleMedication] call ace_medical_treatment_fnc_onMedicationUsage;
+[_patient, _className, _maxDose, _incompatibleMedication] call ACEFUNC(medical_treatment,onMedicationUsage);
 
 //Change Alpha Factor
 [_patient, _alphaFactor] call FUNC(alphaAction);
+
+
+if (_className in ["Lorazepam","Fentanyl","Ketamine","EACA","TXA","Atropine","Amiodarone","Flumazenil"]) then {
+    [format ["kat_pharma_%1Local", toLower _className], [_patient, _bodyPart], _patient] call CBA_fnc_targetEvent;
+};

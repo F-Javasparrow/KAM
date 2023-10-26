@@ -15,13 +15,13 @@
  * Public: No
  */
 
-params ["_unit"];
+params ["_unit", ["_isRespawn", true]];
 
-// KAT_medical_airwayStatus - oxygen saturation
-_unit setVariable ["KAT_medical_airwayStatus", 100, true];
-_unit setVariable ["KAT_medical_airwayOccluded", false, true];
-_unit setVariable ["KAT_medical_pneumothorax", false, true];
-_unit setVariable ["KAT_medical_hemopneumothorax", false, true];
-_unit setVariable ["KAT_medical_tensionpneumothorax", false, true];
+if (!local _unit) exitWith {};
+if !(GVAR(enable)) exitWith {};
+
+_unit setVariable [QGVAR(airwayStatus), 100, true];
 
 _unit setVariable [QGVAR(pulseoximeter), false, true];
+_unit setVariable [QGVAR(PulseOximeter_Volume), true, true];
+_unit setVariable [QGVAR(PulseOximeter_VolumePatient), false, true];

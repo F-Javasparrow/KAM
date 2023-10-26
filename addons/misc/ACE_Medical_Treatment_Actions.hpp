@@ -1,5 +1,6 @@
 class ACE_Medical_Treatment_Actions {
     class SalineIV;
+    class BasicBandage;
     class SalineIV_Stand: SalineIV {
         displayName = CSTRING(Display_IVStand);
         medicRequired = 0;
@@ -18,13 +19,18 @@ class ACE_Medical_Treatment_Actions {
         condition = QUOTE([ARR_2(_medic, 250)] call FUNC(conditionIV));
         callbackSuccess = QUOTE([ARR_5(_medic, _patient, _bodyPart, 'SalineIV_250', 'ACE_salineIV_250')] call FUNC(treatmentIV));
     };
-    class PersonalAidKit;
-    class LimitWounds: PersonalAidKit {
-        displayName = CSTRING(LIMITWOUNDS_Display);
-        displayNameProgress = CSTRING(LIMITWOUNDS_Display);
-        patientStateCondition = QGVAR(limitWounds_condition);
-        condition = QUOTE(([_patient] call FUNC(getNumOpenWounds) > 5) && GVAR(limitWounds_enable));
-        treatmentTime = 8;
-        callbackSuccess = QUOTE([_patient] call FUNC(limitWounds));
+    class RemoveTourniquet: BasicBandage {
+        treatmentTime = QGVAR(treatmentTimeDetachTourniquet);
+    };
+    class ApplyNeckTourniquet: BasicBandage {
+        displayName = ACECSTRING(medical_treatment,Apply_Tourniquet);
+        displayNameProgress = ACECSTRING(medical_treatment,Applying_Tourniquet);
+        icon = QPATHTOF(ui\tourniquet.paa);
+        allowedSelections[] = {"Head"};
+        items[] = {"ACE_tourniquet"};
+        treatmentTime = QACEGVAR(medical_treatment,treatmentTimeTourniquet);
+        condition = QUOTE(!([ARR_2(_patient,_bodyPart)] call ACEFUNC(medical_treatment,hasTourniquetAppliedTo)) && GVAR(neckTourniquet));
+        callbackSuccess = QFUNC(headTourniquet);
+        litter[] = {};
     };
 };

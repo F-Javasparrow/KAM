@@ -18,30 +18,30 @@
 params ["_display"];
 
 // Create background effects based on interact menu setting
-if (ace_interact_menu_menuBackground == 1) then {["ace_medical_gui_id", true] call ace_common_blurScreen};
-if (ace_interact_menu_menuBackground == 2) then {0 cutRsc ["ace_interact_menu_menuBackground", "PLAIN", 1, false]};
+if (ACEGVAR(interact_menu,menuBackground) == 1) then {[QACEGVAR(medical_gui,id), true] call ACEFUNC(common,blurScreen)};
+if (ACEGVAR(interact_menu,menuBackground) == 2) then {0 cutRsc [QACEGVAR(interact_menu,menuBackground), "PLAIN", 1, false]};
 
 // Fix mouse moving randomly
 [{
     [{setMousePosition _this}, _this] call CBA_fnc_execNextFrame;
 }, getMousePosition] call CBA_fnc_execNextFrame;
 
-// Set target name as title
-private _ctrlTitle = _display displayCtrl IDC_TITLE;
-_ctrlTitle ctrlSetText ([ace_medical_gui_target] call ace_common_fnc_getName);
+// Set middle header as target name
+private _ctrlTitle = _display displayCtrl IDC_NAME;
+_ctrlTitle ctrlSetText ([ACEGVAR(medical_gui,target)] call ACEFUNC(common,getName));
 
 // Initially hide the triage select buttons
-[_display] call ace_medical_gui_fnc_toggleTriageSelect;
+[_display] call ACEFUNC(medical_gui,toggleTriageSelect);
 
 // Store display and add PFH to update it
-uiNamespace setVariable ["ace_medical_gui_menuDisplay", _display];
-["ace_medicalMenuOpened", [ACE_player, ace_medical_gui_target, _display]] call CBA_fnc_localEvent;
+uiNamespace setVariable [QACEGVAR(medical_gui,menuDisplay), _display];
+["ace_medicalMenuOpened", [ACE_player, ACEGVAR(medical_gui,target), _display]] call CBA_fnc_localEvent;
 
-if (ace_medical_gui_menuPFH != -1) exitWith {
-    TRACE_1("Menu PFH already running",ace_medical_gui_menuPFH);
+if (ACEGVAR(medical_gui,menuPFH) != -1) exitWith {
+    TRACE_1("Menu PFH already running",ACEGVAR(medical_gui,menuPFH));
 };
 
-ace_medical_gui_menuPFH = [ace_medical_gui_fnc_menuPFH, 0, []] call CBA_fnc_addPerFrameHandler;
+ACEGVAR(medical_gui,menuPFH) = [ACEFUNC(medical_gui,menuPFH), 0, []] call CBA_fnc_addPerFrameHandler;
 
 // Hide categories if they don't have any actions (airway)
 private _list = [
@@ -57,12 +57,28 @@ private _list = [
 ];
 private _countEnabled = {
     _x params ["", "_category"];
-    if (_category isEqualType "") then { _x set [1, (ace_medical_gui_actions findIf {_category == _x select 1}) > -1]; };
+    if (_category isEqualType "") then { _x set [1, (ACEGVAR(medical_gui,actions) findIf {_category == _x select 1}) > -1]; };
     _x select 1
 } count _list;
-private _offsetX = POS_X(1.5) + 0.5 * (POS_X(12) - POS_X(_countEnabled * 1.5));
+private _offsetX = POS_X(1.5) + 0.5 * (POS_X(12.33) - POS_X(_countEnabled * 1.5) - POS_W(2 * 0.2));
+// 0.2 - divider gap size
+
+// Set divider position
+private _ctrl = _display displayCtrl IDC_TRIAGE_DIVIDER;
+_ctrl ctrlSetPositionX _offsetX + POS_W(1.5) + POS_W(0.085); // 0.085 = (0.2 - 0.03) / 2
+_ctrl ctrlCommit 0;
+
+_ctrl = _display displayCtrl IDC_TOGGLE_DIVIDER;
+_ctrl ctrlSetPositionX _offsetX + POS_W(1.5*(_countEnabled - 1)) + POS_W(0.2) + POS_W(0.085);
+_ctrl ctrlCommit 0;
+
 {
     _x params ["_idc", "_enabled"];
+
+    if (_forEachIndex == 1 || {_forEachIndex == count _list - 1}) then {
+        _offsetX = _offsetX + POS_W(0.2);
+    };
+
     private _ctrl = _display displayCtrl _idc;
     if (_enabled) then {
         _ctrl ctrlSetPositionX _offsetX;
@@ -72,3 +88,18 @@ private _offsetX = POS_X(1.5) + 0.5 * (POS_X(12) - POS_X(_countEnabled * 1.5));
         _ctrl ctrlShow false;
     };
 } forEach _list;
+
+if (GVAR(showPatientSideLabels)) then {
+    (_display displayCtrl IDC_SIDE_LABEL_LEFT) ctrlShow true;
+    (_display displayCtrl IDC_SIDE_LABEL_RIGHT) ctrlShow true;
+};
+
+// Set toggle button icon and tooltip
+private _ctrl = _display displayCtrl IDC_TOGGLE;
+if (ACEGVAR(medical_gui,target) == ACE_player) then {
+    _ctrl ctrlSetText QACEPATHTOF(medical_gui,data\categories\toggle_to_other.paa);
+    _ctrl ctrlSetTooltip ACELLSTRING(medical_gui,ToggleToOther);
+} else {
+    _ctrl ctrlSetText QACEPATHTOF(medical_gui,data\categories\toggle_to_self.paa);
+    _ctrl ctrlSetTooltip ACELLSTRING(medical_gui,ToggleToSelf);
+};

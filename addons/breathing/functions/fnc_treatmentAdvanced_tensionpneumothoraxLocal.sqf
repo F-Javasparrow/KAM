@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 /*
  * Author: Kygan, modified by YetheSamartaka and Tomcat.
- * Treatment for hemopneumothorax
+ * Treatment for tension pneumothorax
  * Main function
  *
  * Arguments:
@@ -12,27 +12,20 @@
  * None
  *
  * Example:
- * call kat_breathing_fnc_treatmentAdvanced_hemopneumothoraxLocal;
+ * call kat_breathing_fnc_treatmentAdvanced_tensionpneumothoraxLocal;
  *
  * Public: No
  */
 
 params ["_medic", "_patient"];
 
-if !(kat_breathing_tensionhemothorax_hardcore) exitWith {
-    if ((_patient getVariable ["KAT_medical_tensionpneumothorax", false]) && {_patient getVariable ["KAT_medical_activeChestSeal", false]}) then {
-        _patient setVariable ["KAT_medical_tensionpneumothorax", false, true];
-        [_patient, "activity", LSTRING(tensionpneumothorax), [[_medic] call ace_common_fnc_getName]] call ace_medical_treatment_fnc_addToLog;
-        if (!(_patient getVariable ["KAT_medical_pneumothorax", false]) && {!(_patient getVariable ["KAT_medical_hemopneumothorax", false]) && {!(_patient getVariable ["KAT_medical_tensionpneumothorax", false])}}) then {
-            _patient setVariable ["KAT_medical_activeChestSeal", false, true];
-        };
+if (_patient getVariable [QGVAR(activeChestSeal), false]) then {
+    _patient setVariable [QGVAR(tensionpneumothorax), false, true];
+};
+
+if (!(_patient getVariable [QGVAR(pneumothorax), 0] > 0) && !(_patient getVariable [QGVAR(hemopneumothorax), false]) && !(_patient getVariable [QGVAR(tensionpneumothorax), false])) then {
+    [_patient, 0, 0, "ptx_tension", true] call EFUNC(circulation,updateBloodPressureChange);
+    if (GVAR(clearChestSealAfterTreatment)) then {
+        _patient setVariable [QGVAR(activeChestSeal), false, true];
     };
-};
-
-if (_patient getVariable ["KAT_medical_activeChestSeal", false]) then {
-    _patient setVariable ["KAT_medical_tensionpneumothorax", false, true];
-};
-
-if (!(_patient getVariable ["KAT_medical_pneumothorax", false]) && {!(_patient getVariable ["KAT_medical_hemopneumothorax", false]) && {!(_patient getVariable ["KAT_medical_tensionpneumothorax", false])}}) then {
-    _patient setVariable ["KAT_medical_activeChestSeal", false, true];
 };
